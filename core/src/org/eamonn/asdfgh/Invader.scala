@@ -52,7 +52,7 @@ case class Invader(
         goUp()
       }
     }
-    if(location.y > 31){
+    if (location.y > 31) {
       game.invaders = game.invaders.filterNot(i => i eq this)
       game.globalHealth -= version.tier
     }
@@ -65,8 +65,19 @@ case class Invader(
       screenUnit,
       screenUnit
     )
+    if (game.invaders.indexOf(this) == game.controlled) {
+      batch.draw(
+        Asdfgh.frame,
+        location.x * screenUnit,
+        location.y * screenUnit,
+        screenUnit,
+        screenUnit
+      )
+    }
   }
 }
 
-case class basicOne(var image: TextureWrapper = Asdfgh.invader1, var tier: Int = 1)
-    extends invaderType
+case class basicOne(
+    var image: TextureWrapper = Asdfgh.invader1,
+    var tier: Int = 1
+) extends invaderType

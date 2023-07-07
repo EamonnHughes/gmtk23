@@ -11,6 +11,7 @@ class Game extends Scene {
   var globalHealth = 10
   var resources = 20
   var defender = Defender(this)
+  var controlled = -1
   def timeSkip(): Unit = {
     if(resources >= 5) {
       resources -= 5
@@ -29,7 +30,7 @@ class Game extends Scene {
 
   override def init(): InputAdapter = {
 for(i <- 0 until 64) {
-  spawnNewInvader(new basicOne, 16f + i)
+  spawnNewInvader(new basicOne, i)
 }
   new GameControl(this)
   }
@@ -42,7 +43,7 @@ for(i <- 0 until 64) {
       if(i.location.x >= 1) rowThreat(i.location.x.floor.toInt - 1) += (i.version.tier * i.location.y/3).ceil.toInt
       if(i.location.x < 15) rowThreat(i.location.x.floor.toInt + 1) += (i.version.tier * i.location.y/3).ceil.toInt
     })
-    invaders.foreach(i => i.update(delta))
+    invaders.zipWithIndex.filterNot(i => controlled == i._2).foreach(i => i._1.update(delta))
     defender.update(delta)
     None
   }

@@ -27,6 +27,7 @@ class Asdfgh extends ApplicationAdapter {
     Asdfgh.Logo = TextureWrapper.load("Logo.png")
     Asdfgh.defender = TextureWrapper.load("defender.png")
     Asdfgh.invader1 = TextureWrapper.load("baseAlien.png")
+    Asdfgh.frame = TextureWrapper.load("frame.png")
 
     //    Asdfgh.sound = Asdfgh.loadSound("triangle.mp3")
 
@@ -67,6 +68,7 @@ object Asdfgh {
   var Logo: TextureWrapper = _
   var defender: TextureWrapper = _
   var invader1: TextureWrapper = _
+  var frame: TextureWrapper = _
 
   def mobile: Boolean = isMobile(Gdx.app.getType)
 
