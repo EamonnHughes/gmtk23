@@ -3,7 +3,6 @@ package org.eamonn
 import com.badlogic.gdx.Gdx.input
 import com.badlogic.gdx.Input.Peripheral
 import com.badlogic.gdx.graphics.Color
-import org.eamonn.asdfgh.util.Vec2
 
 import java.util.concurrent.TimeUnit
 import scala.concurrent.duration.FiniteDuration
@@ -18,7 +17,7 @@ package object asdfgh {
     amt
   }
 
-  def screenUnit: Float = (Geometry.ScreenWidth min Geometry.ScreenHeight) / 40
+  def screenUnit: Float = Geometry.ScreenWidth / 16
 
   def compassAvailable: Boolean =
     input.isPeripheralAvailable(Peripheral.Compass)
