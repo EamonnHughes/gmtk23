@@ -21,12 +21,7 @@ class GameControl(game: Game) extends InputAdapter {
 
 
   override def keyUp(keycode: Int): Boolean = {
-    if (keycode == Keys.NUM_1) {
-      game.spawnNewInvader(new basicOne)
-    }
-    if(keycode == Keys.S){
-      game.timeSkip()
-    }
+
     true
   }
 
