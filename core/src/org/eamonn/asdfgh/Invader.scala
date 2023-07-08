@@ -81,7 +81,7 @@ case class Invader(
     }
     location.set(bodyd.getPosition.cpy())
     direction = bodyd.getAngle
-    if (location.y > 31) {
+    if (location.y > 27) {
       dead = true
       game.globalHealth -= version.tier
     }
@@ -104,7 +104,7 @@ case class Invader(
       )
     location.set(bodyd.getPosition.cpy())
     direction = bodyd.getAngle
-    if (location.y > 31) {
+    if (location.y > 27) {
       dead = true
       game.globalHealth -= version.tier
     }

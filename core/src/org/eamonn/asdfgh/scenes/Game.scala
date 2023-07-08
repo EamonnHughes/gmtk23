@@ -12,7 +12,6 @@ import org.eamonn.asdfgh.Scene
 class Game extends Scene {
   var spawnTimer = 0f
   var globalHealth = 10
-  var resources = 20
   var defender = Defender(this)
   var controlled = 10000
   var contacter: Contacter = _
@@ -74,7 +73,7 @@ class Game extends Scene {
     projectiles.foreach(p => p.draw(batch))
     invaders.foreach(i => i.draw(batch))
     Text.mediumFont.setColor(Color.WHITE)
-    Text.mediumFont.draw(batch, resources.toString, 0f, Geometry.ScreenHeight)
+    Text.mediumFont.draw(batch, globalHealth.toString, 0f, Geometry.ScreenHeight)
 
     debugMatrix = new Matrix4(batch.getProjectionMatrix)
     debugMatrix.scale(screenUnit, screenUnit, 1f)

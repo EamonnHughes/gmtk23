@@ -14,7 +14,7 @@ import org.eamonn.asdfgh.util.GarbageCan
 object Text {
   def loadFonts()(implicit garbage: GarbageCan): Unit = {
     val generator = new FreeTypeFontGenerator(
-      Gdx.files.internal("SpaceMono-Regular.ttf")
+      Gdx.files.internal("PublicPixel-z84yD.ttf")
     )
     val parameter = new FreeTypeFontGenerator.FreeTypeFontParameter
     parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + CharExtras

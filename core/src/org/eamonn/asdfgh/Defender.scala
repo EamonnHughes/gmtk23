@@ -6,7 +6,7 @@ import com.badlogic.gdx.physics.box2d.{Body, BodyDef, Fixture, PolygonShape}
 import org.eamonn.asdfgh.scenes.Game
 
 case class Defender(game: Game) {
-  var location = new Vector2(0, 32f)
+  var location = new Vector2(0, 28f)
   var targetX = 0f
   var sTick = 1f
   def draw(batch: PolygonSpriteBatch): Unit = {
@@ -19,7 +19,7 @@ case class Defender(game: Game) {
     )
   }
   def shoot(): Unit = {
-    var p = Projectile(location.cpy(), game)
+    var p = Projectile(new Vector2(location.x, location.y -1), game)
     p.create()
     game.projectiles = p :: game.projectiles
 
