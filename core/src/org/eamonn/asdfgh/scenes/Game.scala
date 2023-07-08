@@ -15,8 +15,8 @@ class Game extends Scene {
   var defender = Defender(this)
   var controlled = -1
   var world: World = _
-  def spawnNewInvader(version: invaderType, locx: Float): Unit = {
-    invaders = Invader(new Vector2(locx, 0f), version, this) :: invaders
+  def spawnNewInvader(version: invaderType, loc: Vector2): Unit = {
+    invaders = Invader(new Vector2(1 + loc.x, loc.y), version, this) :: invaders
   }
   var rowThreat: Array[Int] =
     Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
@@ -24,11 +24,12 @@ class Game extends Scene {
 
   override def init(): InputAdapter = {
     world = new World(new Vector2(0, -10f), true)
-    for (i <- 0 until 64) {
-      spawnNewInvader(new basicOne, 17f + i)
+    for (x <- 0 until 8) {
+      for(y <- 0 until 2) {
+        spawnNewInvader(new basicOne, new Vector2(x*2, y*4))
+      }
     }
     invaders.foreach(i => i.create())
-    defender.create()
     new GameControl(this)
   }
 

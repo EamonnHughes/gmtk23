@@ -28,10 +28,10 @@ case class Invader(
     val shape = new PolygonShape()
     shape.set(
       Array(
-        new Vector2(0.5f, 0.5f),
-        new Vector2(-0.5f, 0.5f),
-        new Vector2(0.5f, -0.5f),
-        new Vector2(-0.5f, -0.5f)
+        new Vector2(1f, 1f),
+        new Vector2(1f, 0f),
+        new Vector2(0f, 1f),
+        new Vector2(0f, 0f)
       )
     )
     bodyDef.`type` = BodyDef.BodyType.DynamicBody
@@ -43,7 +43,7 @@ case class Invader(
     shape.dispose()
   }
   def goUp(): Unit = {
-    yTarget += 1
+    yTarget += 2
     goingUp = true
     if (target == 0) {
       target = 15
@@ -55,7 +55,7 @@ case class Invader(
   def update(delta: Float): Unit = {
     if (goingUp) {
       if (location.y < yTarget) {
-        bodyd.setLinearVelocity(0, delta * 50)
+        bodyd.setLinearVelocity(0, delta * 300)
       } else {
         goingUp = false
       }
@@ -68,7 +68,7 @@ case class Invader(
       if (
         (location.x < target && target == 15) || (location.x > target && target == 0)
       ) {
-        bodyd.setLinearVelocity((delta * dirMul * 500), 0)
+        bodyd.setLinearVelocity((delta * dirMul * 180), 0)
       } else {
         goUp()
       }
