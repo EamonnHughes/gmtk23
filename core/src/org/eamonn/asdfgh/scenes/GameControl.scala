@@ -26,7 +26,7 @@ class GameControl(game: Game) extends InputAdapter {
     game.keysDown = game.keysDown.filterNot(k => k == keycode)
     if(keycode == Keys.TAB){
       if(game.invaders.exists(e=> e.controlled)) {
-        game.invaders.foreach(e => {
+        game.invaders.filter(e => e.controlled).foreach(e => {
           e.controlled = false
           game.invaders(Random.nextInt(game.invaders.length)).controlled = true
         })

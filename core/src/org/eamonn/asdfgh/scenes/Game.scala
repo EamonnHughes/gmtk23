@@ -2,7 +2,7 @@ package org.eamonn.asdfgh
 package scenes
 
 import com.badlogic.gdx.Input.Keys
-import com.badlogic.gdx.InputAdapter
+import com.badlogic.gdx.{Gdx, InputAdapter, Preferences}
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.math.{Matrix4, Vector2}
@@ -65,7 +65,10 @@ class Game extends Scene {
       .foreach(i => i.update(delta))
     invaders.filter(i => i.controlled).foreach(e => e.updateAsControlled(delta))
     defender.update(delta)
-    None
+    if (globalHealth <= 0) Some(new GameOver(timerUp, true))
+    else if (invaders.isEmpty || timerUp >= 60f)
+      Some(new GameOver(timerUp, false))
+    else None
   }
 
   override def render(batch: PolygonSpriteBatch): Unit = {
@@ -75,7 +78,7 @@ class Game extends Scene {
     Text.smallFont.setColor(Color.WHITE)
     Text.smallFont.draw(
       batch,
-      s"Laser at %${(timerUp*100/60).round} \nShields at %${globalHealth*10}",
+      s"Laser at %${(timerUp * 100 / 60).round} \nShields at %${globalHealth * 10}",
       0f,
       Geometry.ScreenHeight
     )
@@ -83,4 +86,9 @@ class Game extends Scene {
     debugMatrix = new Matrix4(batch.getProjectionMatrix)
     debugMatrix.scale(screenUnit, screenUnit, 1f)
   }
+}
+
+object Game {
+  final val HighScoreKey = "Highscore"
+  val prefs: Preferences = Gdx.app.getPreferences("org.eamonn.asdfgh.Template")
 }
