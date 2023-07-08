@@ -55,7 +55,7 @@ case class Invader(
   def update(delta: Float): Unit = {
     if (goingUp) {
       if (location.y < yTarget) {
-        bodyd.setLinearVelocity(0, delta * 5)
+        bodyd.setLinearVelocity(0, delta * 50)
       } else {
         goingUp = false
       }
@@ -68,10 +68,12 @@ case class Invader(
       if (
         (location.x < target && target == 15) || (location.x > target && target == 0)
       ) {
-        bodyd.setLinearVelocity((delta * dirMul * 5), 0)
+        bodyd.setLinearVelocity((delta * dirMul * 500), 0)
       } else {
         goUp()
       }
+    } else if (!goingUp) {
+      bodyd.setLinearVelocity(0, 0)
     }
     location.set(bodyd.getPosition.cpy())
     if (location.y > 31) {

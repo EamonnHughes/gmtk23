@@ -15,15 +15,6 @@ class Game extends Scene {
   var defender = Defender(this)
   var controlled = -1
   var world: World = _
-  def timeSkip(): Unit = {
-    if (resources >= 5) {
-      resources -= 5
-      invaders.foreach(i => {
-        i.location.y += 2
-        i.yTarget += 2
-      })
-    }
-  }
   def spawnNewInvader(version: invaderType, locx: Float): Unit = {
     invaders = Invader(new Vector2(locx, 0f), version, this) :: invaders
   }
@@ -34,7 +25,7 @@ class Game extends Scene {
   override def init(): InputAdapter = {
     world = new World(new Vector2(0, -10f), true)
     for (i <- 0 until 64) {
-      spawnNewInvader(new basicOne, i)
+      spawnNewInvader(new basicOne, 17f + i)
     }
     invaders.foreach(i => i.create())
     defender.create()
