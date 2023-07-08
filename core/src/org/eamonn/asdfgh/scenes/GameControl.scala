@@ -4,6 +4,8 @@ package scenes
 import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.InputAdapter
 
+import scala.util.Random
+
 class GameControl(game: Game) extends InputAdapter {
   override def touchDown(
                           screenX: Int,
@@ -25,9 +27,8 @@ class GameControl(game: Game) extends InputAdapter {
     if(keycode == Keys.TAB){
       if(game.invaders.exists(e=> e.controlled)) {
         game.invaders.foreach(e => {
-          game.invaders((game.invaders.indexOf(e) + 1) % game.invaders.length).controlled = true
           e.controlled = false
-
+          game.invaders(Random.nextInt(game.invaders.length)).controlled = true
         })
       } else if (game.invaders.nonEmpty) {
         game.invaders.head.controlled = true

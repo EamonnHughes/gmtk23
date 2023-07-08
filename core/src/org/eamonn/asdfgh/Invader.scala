@@ -160,5 +160,5 @@ case class Invader(
 
 case class basicOne(
     var image: TextureWrapper = Asdfgh.invader1,
-    var tier: Int = 3
+    var tier: Int = 5
 ) extends invaderType
