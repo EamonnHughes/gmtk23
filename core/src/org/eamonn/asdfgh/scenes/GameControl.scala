@@ -21,6 +21,7 @@ class GameControl(game: Game) extends InputAdapter {
 
 
   override def keyUp(keycode: Int): Boolean = {
+    game.keysDown = game.keysDown.filterNot(k => k == keycode)
     if(keycode == Keys.TAB){
       game.controlled += 1
       if(game.controlled >= game.invaders.length) game.controlled = 0
@@ -29,7 +30,7 @@ class GameControl(game: Game) extends InputAdapter {
   }
 
   override def keyDown(keycode: Int): Boolean = {
-
+    game.keysDown = keycode :: game.keysDown
     true
   }
 }

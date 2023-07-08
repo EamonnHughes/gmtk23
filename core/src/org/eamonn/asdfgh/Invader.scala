@@ -1,5 +1,6 @@
 package org.eamonn.asdfgh
 
+import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.{Body, BodyDef, Fixture, PolygonShape}
@@ -15,8 +16,9 @@ case class Invader(
     var version: invaderType,
     game: Game
 ) {
+  var direction = 0f
   var health = version.tier
-  var target = 0
+  var target = 1
   var dirMul: Int = -1
   var yTarget: Float = location.y
   var goingUp = false
@@ -28,10 +30,10 @@ case class Invader(
     val shape = new PolygonShape()
     shape.set(
       Array(
-        new Vector2(1f, 1f),
-        new Vector2(1f, 0f),
-        new Vector2(0f, 1f),
-        new Vector2(0f, 0f)
+        new Vector2(.5f, .5f),
+        new Vector2(.5f, -.5f),
+        new Vector2(-.5f, .5f),
+        new Vector2(-.5f, -.5f)
       )
     )
     bodyDef.`type` = BodyDef.BodyType.DynamicBody
@@ -45,17 +47,17 @@ case class Invader(
   def goUp(): Unit = {
     yTarget += 2
     goingUp = true
-    if (target == 0) {
-      target = 15
-    } else if (target == 15) {
-      target = 0
+    if (target == 1) {
+      target = 16
+    } else if (target == 16) {
+      target = 1
     }
     dirMul = -dirMul
   }
   def update(delta: Float): Unit = {
     if (goingUp) {
       if (location.y < yTarget) {
-        bodyd.setLinearVelocity(0, delta * 300)
+        bodyd.setLinearVelocity(delta * 300, 0)
       } else {
         goingUp = false
       }
@@ -66,9 +68,9 @@ case class Invader(
         .exists(i => i.goingUp)
     ) {
       if (
-        (location.x < target && target == 15) || (location.x > target && target == 0)
+        (location.x < target && target == 16) || (location.x > target && target == 10)
       ) {
-        bodyd.setLinearVelocity((delta * dirMul * 180), 0)
+        bodyd.setLinearVelocity(0, (delta * dirMul * 180))
       } else {
         goUp()
       }
@@ -76,26 +78,56 @@ case class Invader(
       bodyd.setLinearVelocity(0, 0)
     }
     location.set(bodyd.getPosition.cpy())
+    direction = bodyd.getAngle
     if (location.y > 31) {
       game.invaders = game.invaders.filterNot(i => i eq this)
       game.globalHealth -= version.tier
     }
   }
+  def updateAsControlled(delta: Float): Unit = {
+    bodyd.setLinearVelocity(0, 0)
+    if (game.keysDown.contains(Keys.A)) bodyd.setAngularVelocity(delta * 20)
+    if (game.keysDown.contains(Keys.D)) bodyd.setAngularVelocity(-delta * 20)
+    location.set(bodyd.getPosition.cpy())
+    direction = bodyd.getAngle
+  }
   def draw(batch: PolygonSpriteBatch): Unit = {
     batch.draw(
       version.image,
-      location.x * screenUnit,
-      location.y * screenUnit,
-      screenUnit,
-      screenUnit
+      ((location.x - .5f - (Math.cos(direction).toFloat)) * screenUnit),
+      ((location.y - .5f - (Math.sin(direction).toFloat)) * screenUnit),
+      0,
+      0,
+      (screenUnit),
+      (screenUnit),
+      1f,
+      1f,
+      direction.toDegrees,
+      0,
+      0,
+      16,
+      16,
+      false,
+      false
     )
     if (game.invaders.indexOf(this) == game.controlled) {
       batch.draw(
         Asdfgh.frame,
-        location.x * screenUnit,
-        location.y * screenUnit,
-        screenUnit,
-        screenUnit
+        ((location.x - .5f - (Math.cos(direction).toFloat)) * screenUnit),
+        ((location.y - .5f - (Math.sin(direction).toFloat)) * screenUnit),
+        0,
+        0,
+        (screenUnit),
+        (screenUnit),
+        1f,
+        1f,
+        direction.toDegrees,
+        0,
+        0,
+        16,
+        16,
+        false,
+        false
       )
     }
   }

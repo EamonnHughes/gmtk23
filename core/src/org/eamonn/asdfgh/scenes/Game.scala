@@ -1,6 +1,7 @@
 package org.eamonn.asdfgh
 package scenes
 
+import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.InputAdapter
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
@@ -13,8 +14,9 @@ class Game extends Scene {
   var globalHealth = 10
   var resources = 20
   var defender = Defender(this)
-  var controlled = -1
+  var controlled = 10000
   var world: World = _
+  var keysDown = List.empty[Int]
   def spawnNewInvader(version: invaderType, loc: Vector2): Unit = {
     invaders = Invader(new Vector2(1 + loc.x, loc.y), version, this) :: invaders
   }
@@ -24,15 +26,10 @@ class Game extends Scene {
 
   override def init(): InputAdapter = {
     world = new World(new Vector2(0, -10f), true)
-    for (x <- 0 until 8) {
-      for(y <- 0 until 2) {
-        spawnNewInvader(new basicOne, new Vector2(x*2, y*4))
-      }
-    }
+        spawnNewInvader(new basicOne, new Vector2(10, 0))
     invaders.foreach(i => i.create())
     new GameControl(this)
   }
-
   override def update(delta: Float): Option[Scene] = {
     world.step(delta, 3, 3)
     rowThreat = Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
@@ -55,6 +52,7 @@ class Game extends Scene {
     invaders.zipWithIndex
       .filterNot(i => controlled == i._2)
       .foreach(i => i._1.update(delta))
+    if(controlled < invaders.length) invaders(controlled).updateAsControlled(delta)
     defender.update(delta)
     None
   }
