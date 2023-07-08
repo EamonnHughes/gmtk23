@@ -6,7 +6,7 @@ import com.badlogic.gdx.{Gdx, InputAdapter, Preferences}
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.math.{Matrix4, Vector2}
-import com.badlogic.gdx.physics.box2d.{Body, Box2DDebugRenderer, World}
+import com.badlogic.gdx.physics.box2d.{Body, BodyDef, Box2DDebugRenderer, Fixture, PolygonShape, World}
 import org.eamonn.asdfgh.Scene
 
 class Game extends Scene {
@@ -23,6 +23,69 @@ class Game extends Scene {
   var rowThreat: Array[Int] =
     Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
   var invaders: List[Invader] = List.empty
+  var bodyWallOne: Body = _
+  var fixtWallOne: Fixture = _
+  var bodyWallTwo: Body = _
+  var fixtWallTwo: Fixture = _
+  var bodyWallThree: Body = _
+  var fixtWallThree: Fixture = _
+  def createWallOne(): Unit = {
+    var bodyDef: BodyDef = new BodyDef()
+    val shape = new PolygonShape()
+    shape.set(
+      Array(
+        new Vector2(0, 0),
+        new Vector2(0, Geometry.ScreenHeight),
+        new Vector2(1, Geometry.ScreenHeight),
+        new Vector2(1, 0),
+      )
+    )
+    bodyDef.`type` = BodyDef.BodyType.StaticBody
+    bodyDef.position.set(-1, 0)
+    bodyWallOne = world.createBody(bodyDef)
+    fixtWallOne = bodyWallOne.createFixture(shape, 1f)
+    fixtWallOne.setUserData(new Wall)
+    bodyWallOne.setGravityScale(0)
+    shape.dispose()
+  }
+  def createWallTwo(): Unit = {
+    var bodyDef: BodyDef = new BodyDef()
+    val shape = new PolygonShape()
+    shape.set(
+      Array(
+        new Vector2(0, 0),
+        new Vector2(0, Geometry.ScreenHeight),
+        new Vector2(1, Geometry.ScreenHeight),
+        new Vector2(1, 0),
+      )
+    )
+    bodyDef.`type` = BodyDef.BodyType.StaticBody
+    bodyDef.position.set(Geometry.ScreenWidth / screenUnit, 0)
+    bodyWallTwo = world.createBody(bodyDef)
+    fixtWallTwo = bodyWallTwo.createFixture(shape, 1f)
+    fixtWallTwo.setUserData(new Wall)
+    bodyWallTwo.setGravityScale(0)
+    shape.dispose()
+  }
+  def createWallThree(): Unit = {
+    var bodyDef: BodyDef = new BodyDef()
+    val shape = new PolygonShape()
+    shape.set(
+      Array(
+        new Vector2(0, 0),
+        new Vector2(0, 1),
+        new Vector2(Geometry.ScreenWidth, 1),
+        new Vector2(Geometry.ScreenWidth, 0)
+      )
+    )
+    bodyDef.`type` = BodyDef.BodyType.StaticBody
+    bodyDef.position.set(0, -1)
+    bodyWallThree = world.createBody(bodyDef)
+    fixtWallThree = bodyWallThree.createFixture(shape, 1f)
+    fixtWallThree.setUserData(new Wall)
+    bodyWallThree.setGravityScale(0)
+    shape.dispose()
+  }
 
   override def init(): InputAdapter = {
     world = new World(new Vector2(0, -10f), true)
@@ -32,6 +95,10 @@ class Game extends Scene {
       }
     }
     invaders.foreach(i => i.create())
+
+    createWallOne()
+    createWallTwo()
+    createWallThree()
 
     debugging = false
     debugRenderer = new Box2DDebugRenderer()
@@ -92,3 +159,5 @@ object Game {
   final val HighScoreKey = "Highscore"
   val prefs: Preferences = Gdx.app.getPreferences("org.eamonn.asdfgh.Template")
 }
+
+class Wall
