@@ -1,6 +1,8 @@
 package org.eamonn.asdfgh
 
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
+import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.physics.box2d.{Body, BodyDef, Fixture, PolygonShape}
 import org.eamonn.asdfgh.scenes.Game
 import org.eamonn.asdfgh.util.TextureWrapper
 
@@ -9,7 +11,7 @@ trait invaderType {
   var tier: Int
 }
 case class Invader(
-    var location: Vec2,
+    var location: Vector2,
     var version: invaderType,
     game: Game
 ) {
@@ -18,14 +20,34 @@ case class Invader(
   var dirMul: Int = -1
   var yTarget: Float = location.y
   var goingUp = false
+  var bodyd: Body = _
+  var fixture: Fixture = _
+
+  def create(): Unit = {
+    var bodyDef: BodyDef = new BodyDef()
+    val shape = new PolygonShape()
+    shape.set(
+      Array(
+        new Vector2(0.5f, 0.5f),
+        new Vector2(-0.5f, 0.5f),
+        new Vector2(0.5f, -0.5f),
+        new Vector2(-0.5f, -0.5f)
+      )
+    )
+    bodyDef.`type` = BodyDef.BodyType.DynamicBody
+    bodyDef.position.set(location.x, location.y)
+    bodyd = game.world.createBody(bodyDef)
+    fixture = bodyd.createFixture(shape, 1f)
+    fixture.setUserData(this)
+    bodyd.setGravityScale(0)
+    shape.dispose()
+  }
   def goUp(): Unit = {
     yTarget += 1
     goingUp = true
     if (target == 0) {
-      location.x = 0
       target = 15
     } else if (target == 15) {
-      location.x = 15
       target = 0
     }
     dirMul = -dirMul
@@ -33,9 +55,8 @@ case class Invader(
   def update(delta: Float): Unit = {
     if (goingUp) {
       if (location.y < yTarget) {
-        location.y += delta * 5
+        bodyd.setLinearVelocity(0, delta * 5)
       } else {
-        location.y = yTarget
         goingUp = false
       }
     }
@@ -47,11 +68,12 @@ case class Invader(
       if (
         (location.x < target && target == 15) || (location.x > target && target == 0)
       ) {
-        location.x += (delta * dirMul * 5)
+        bodyd.setLinearVelocity((delta * dirMul * 5), 0)
       } else {
         goUp()
       }
     }
+    location.set(bodyd.getPosition.cpy())
     if (location.y > 31) {
       game.invaders = game.invaders.filterNot(i => i eq this)
       game.globalHealth -= version.tier

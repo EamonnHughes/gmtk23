@@ -4,7 +4,7 @@ import com.badlogic.gdx.Application.ApplicationType
 import com.badlogic.gdx.audio.Sound
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.math.Matrix4
-import com.badlogic.gdx.utils.ScreenUtils
+import com.badlogic.gdx.utils.{GdxNativesLoader, ScreenUtils}
 import com.badlogic.gdx.{ApplicationAdapter, Gdx, Input}
 import org.eamonn.asdfgh.scenes.Home
 import org.eamonn.asdfgh.util.{GarbageCan, TextureWrapper}
@@ -17,6 +17,7 @@ class Asdfgh extends ApplicationAdapter {
   private var scene: Scene = _
 
   override def create(): Unit = {
+    GdxNativesLoader.load()
 
     Gdx.input.setCatchKey(Input.Keys.BACK, true)
 
