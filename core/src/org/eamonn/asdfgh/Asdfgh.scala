@@ -17,7 +17,6 @@ class Asdfgh extends ApplicationAdapter {
   private var scene: Scene = _
 
   override def create(): Unit = {
-    GdxNativesLoader.load()
 
     Gdx.input.setCatchKey(Input.Keys.BACK, true)
 
