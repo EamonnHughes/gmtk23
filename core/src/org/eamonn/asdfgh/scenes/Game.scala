@@ -34,10 +34,10 @@ class Game extends Scene {
     val shape = new PolygonShape()
     shape.set(
       Array(
-        new Vector2(0, 0),
-        new Vector2(0, Geometry.ScreenHeight),
-        new Vector2(1, Geometry.ScreenHeight),
-        new Vector2(1, 0),
+        new Vector2(-1f, 0),
+        new Vector2(-1f, Geometry.ScreenHeight),
+        new Vector2(0f, Geometry.ScreenHeight),
+        new Vector2(0f, 0),
       )
     )
     bodyDef.`type` = BodyDef.BodyType.StaticBody
@@ -53,10 +53,10 @@ class Game extends Scene {
     val shape = new PolygonShape()
     shape.set(
       Array(
-        new Vector2(0, 0),
-        new Vector2(0, Geometry.ScreenHeight),
-        new Vector2(1, Geometry.ScreenHeight),
-        new Vector2(1, 0),
+        new Vector2(1f, 0),
+        new Vector2(1f, Geometry.ScreenHeight),
+        new Vector2(2f, Geometry.ScreenHeight),
+        new Vector2(2f, 0),
       )
     )
     bodyDef.`type` = BodyDef.BodyType.StaticBody
@@ -72,10 +72,10 @@ class Game extends Scene {
     val shape = new PolygonShape()
     shape.set(
       Array(
+        new Vector2(0, -1),
         new Vector2(0, 0),
-        new Vector2(0, 1),
-        new Vector2(Geometry.ScreenWidth, 1),
-        new Vector2(Geometry.ScreenWidth, 0)
+        new Vector2(Geometry.ScreenWidth, 0),
+        new Vector2(Geometry.ScreenWidth, -1)
       )
     )
     bodyDef.`type` = BodyDef.BodyType.StaticBody
