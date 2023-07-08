@@ -19,7 +19,7 @@ case class Defender(game: Game) {
     )
   }
   def shoot(): Unit = {
-    var p = Projectile(new Vector2(location.x, location.y -1), game)
+    var p = Projectile(new Vector2(location.x + .5f, location.y - 1), game)
     p.create()
     game.projectiles = p :: game.projectiles
 
@@ -37,6 +37,7 @@ case class Defender(game: Game) {
 
 case class Projectile(location: Vector2, game: Game) {
   var bodyd: Body = _
+  var destroyed = false
   var fixture: Fixture = _
   def create(): Unit = {
     var bodyDef: BodyDef = new BodyDef()
@@ -58,8 +59,13 @@ case class Projectile(location: Vector2, game: Game) {
     shape.dispose()
   }
   def update(delta: Float): Unit = {
-    bodyd.setLinearVelocity(0, -delta*100)
+    bodyd.setLinearVelocity(0, -delta * 100)
     location.set(bodyd.getPosition)
+    if (destroyed) {
+      game.projectiles = game.projectiles.filterNot(e => e eq this)
+      bodyd.destroyFixture(fixture)
+      game.world.destroyBody(bodyd)
+    }
   }
   def draw(batch: PolygonSpriteBatch): Unit = {
     batch.draw(

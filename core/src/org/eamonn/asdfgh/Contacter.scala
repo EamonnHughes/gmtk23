@@ -7,7 +7,7 @@ class Contacter extends ContactListener {
     var b = contact.getFixtureB.getUserData
     a match {
       case invader: Invader => invader.health -= 1
-
+      case projectile: Projectile => projectile.destroyed = true
       case _ =>
     }
   }

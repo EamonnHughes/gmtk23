@@ -12,8 +12,8 @@ import org.eamonn.asdfgh.Scene
 class Game extends Scene {
   var spawnTimer = 0f
   var globalHealth = 10
+  var timerUp = 0f
   var defender = Defender(this)
-  var controlled = 10000
   var contacter: Contacter = _
   var keysDown = List.empty[Int]
   var projectiles = List.empty[Projectile]
@@ -33,13 +33,14 @@ class Game extends Scene {
     }
     invaders.foreach(i => i.create())
 
-    debugging = true
+    debugging = false
     debugRenderer = new Box2DDebugRenderer()
     contacter = new Contacter()
     world.setContactListener(contacter)
     new GameControl(this)
   }
   override def update(delta: Float): Option[Scene] = {
+    timerUp += delta
     world.step(delta, 3, 3)
     projectiles.foreach(p => p.update(delta))
     rowThreat = Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
@@ -59,11 +60,10 @@ class Game extends Scene {
             i.location.x.floor.toInt + 1
           ) += (i.version.tier * i.location.y / 3).ceil.toInt
       })
-    invaders.zipWithIndex
-      .filterNot(i => controlled == i._2)
-      .foreach(i => i._1.update(delta))
-    if (controlled < invaders.length)
-      invaders(controlled).updateAsControlled(delta)
+    invaders
+      .filterNot(i => i.controlled)
+      .foreach(i => i.update(delta))
+    invaders.filter(i => i.controlled).foreach(e => e.updateAsControlled(delta))
     defender.update(delta)
     None
   }
@@ -72,8 +72,13 @@ class Game extends Scene {
     defender.draw(batch)
     projectiles.foreach(p => p.draw(batch))
     invaders.foreach(i => i.draw(batch))
-    Text.mediumFont.setColor(Color.WHITE)
-    Text.mediumFont.draw(batch, globalHealth.toString, 0f, Geometry.ScreenHeight)
+    Text.smallFont.setColor(Color.WHITE)
+    Text.smallFont.draw(
+      batch,
+      s"Laser at %${(timerUp*100/60).round} \nShields at %${globalHealth*10}",
+      0f,
+      Geometry.ScreenHeight
+    )
 
     debugMatrix = new Matrix4(batch.getProjectionMatrix)
     debugMatrix.scale(screenUnit, screenUnit, 1f)

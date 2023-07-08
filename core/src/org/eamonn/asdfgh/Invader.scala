@@ -19,6 +19,7 @@ case class Invader(
   var direction = 0f
   var health = version.tier
   var target = 1
+  var controlled = false
   var dirMul: Int = -1
   var yTarget: Float = location.y
   var goingUp = false
@@ -83,7 +84,7 @@ case class Invader(
     direction = bodyd.getAngle
     if (location.y > 27) {
       dead = true
-      game.globalHealth -= version.tier
+      game.globalHealth -= health
     }
     if (health <= 0) dead = true
     if (dead) {
@@ -106,7 +107,7 @@ case class Invader(
     direction = bodyd.getAngle
     if (location.y > 27) {
       dead = true
-      game.globalHealth -= version.tier
+      game.globalHealth -= health
     }
     if (health <= 0) dead = true
     if (dead) {
@@ -134,7 +135,7 @@ case class Invader(
       false,
       false
     )
-    if (game.invaders.indexOf(this) == game.controlled) {
+    if (controlled) {
       batch.draw(
         Asdfgh.frame,
         ((location.x - .5f) * screenUnit),
