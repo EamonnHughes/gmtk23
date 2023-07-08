@@ -46,6 +46,9 @@ class Asdfgh extends ApplicationAdapter {
     scene.render(batch)
 
     batch.end()
+    if (scene.debugging) {
+      scene.debugRenderer.render(scene.world, scene.debugMatrix)
+    }
   }
 
   override def dispose(): Unit = {

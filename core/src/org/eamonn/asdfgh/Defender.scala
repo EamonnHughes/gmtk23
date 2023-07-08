@@ -8,6 +8,7 @@ import org.eamonn.asdfgh.scenes.Game
 case class Defender(game: Game) {
   var location = new Vector2(0, 32f)
   var targetX = 0f
+  var sTick = 1f
   def draw(batch: PolygonSpriteBatch): Unit = {
     batch.draw(
       Asdfgh.defender,
@@ -17,8 +18,57 @@ case class Defender(game: Game) {
       screenUnit
     )
   }
+  def shoot(): Unit = {
+    var p = Projectile(location.cpy(), game)
+    p.create()
+    game.projectiles = p :: game.projectiles
+
+  }
   def update(delta: Float): Unit = {
     targetX = game.rowThreat.indexOf(game.rowThreat.maxBy(i => i))
     location.x += delta * 5 * (targetX - location.x).sign
+    sTick -= delta
+    if (sTick <= 0f) {
+      sTick = 1f
+      shoot()
+    }
   }
+}
+
+case class Projectile(location: Vector2, game: Game) {
+  var bodyd: Body = _
+  var fixture: Fixture = _
+  def create(): Unit = {
+    var bodyDef: BodyDef = new BodyDef()
+    val shape = new PolygonShape()
+    shape.set(
+      Array(
+        new Vector2(.1f, .1f),
+        new Vector2(.1f, -.1f),
+        new Vector2(-.1f, .1f),
+        new Vector2(-.1f, -.1f)
+      )
+    )
+    bodyDef.`type` = BodyDef.BodyType.DynamicBody
+    bodyDef.position.set(location.x, location.y)
+    bodyd = game.world.createBody(bodyDef)
+    fixture = bodyd.createFixture(shape, 1f)
+    fixture.setUserData(this)
+    bodyd.setGravityScale(0)
+    shape.dispose()
+  }
+  def update(delta: Float): Unit = {
+    bodyd.setLinearVelocity(0, -delta*100)
+    location.set(bodyd.getPosition)
+  }
+  def draw(batch: PolygonSpriteBatch): Unit = {
+    batch.draw(
+      Asdfgh.Square,
+      (location.x - .1f) * screenUnit,
+      (location.y - .1f) * screenUnit,
+      .2f * screenUnit,
+      .2f * screenUnit
+    )
+  }
+
 }

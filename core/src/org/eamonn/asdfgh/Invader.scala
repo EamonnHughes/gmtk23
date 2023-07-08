@@ -24,6 +24,7 @@ case class Invader(
   var goingUp = false
   var bodyd: Body = _
   var fixture: Fixture = _
+  var dead = false
 
   def create(): Unit = {
     var bodyDef: BodyDef = new BodyDef()
@@ -45,7 +46,7 @@ case class Invader(
     shape.dispose()
   }
   def goUp(): Unit = {
-    yTarget += 2
+    yTarget += 3
     goingUp = true
     if (target == 1) {
       target = 16
@@ -57,20 +58,21 @@ case class Invader(
   def update(delta: Float): Unit = {
     if (goingUp) {
       if (location.y < yTarget) {
-        bodyd.setLinearVelocity(delta * 300, 0)
+        bodyd.setLinearVelocity(0, delta * 100)
       } else {
+        bodyd.setLinearVelocity(0, 0)
         goingUp = false
       }
     }
     if (
       !game.invaders
-        .filter(i => i.location.y.floor == location.y.floor)
-        .exists(i => i.goingUp)
+        .filter(i => i.location.y.floor - 1 == location.y.floor)
+        .exists(i => i.goingUp) && !goingUp
     ) {
       if (
-        (location.x < target && target == 16) || (location.x > target && target == 10)
+        (location.x < target && target == 16) || (location.x > target && target == 1)
       ) {
-        bodyd.setLinearVelocity(0, (delta * dirMul * 180))
+        bodyd.setLinearVelocity((delta * dirMul * 180), 0)
       } else {
         goUp()
       }
@@ -80,24 +82,46 @@ case class Invader(
     location.set(bodyd.getPosition.cpy())
     direction = bodyd.getAngle
     if (location.y > 31) {
-      game.invaders = game.invaders.filterNot(i => i eq this)
+      dead = true
       game.globalHealth -= version.tier
+    }
+    if (health <= 0) dead = true
+    if (dead) {
+      game.invaders = game.invaders.filterNot(e => e eq this)
+      bodyd.destroyFixture(fixture)
+      game.world.destroyBody(bodyd)
     }
   }
   def updateAsControlled(delta: Float): Unit = {
-    bodyd.setLinearVelocity(0, 0)
-    if (game.keysDown.contains(Keys.A)) bodyd.setAngularVelocity(delta * 20)
-    if (game.keysDown.contains(Keys.D)) bodyd.setAngularVelocity(-delta * 20)
+    if (game.keysDown.contains(Keys.A)) bodyd.setAngularVelocity(delta * 120)
+    else if (game.keysDown.contains(Keys.D))
+      bodyd.setAngularVelocity(-delta * 120)
+    else bodyd.setAngularVelocity(0)
+    if (game.keysDown.contains(Keys.W))
+      bodyd.setLinearVelocity(
+        -Math.sin(direction).toFloat * delta * 180f,
+        Math.cos(direction).toFloat * delta * 180f
+      )
     location.set(bodyd.getPosition.cpy())
     direction = bodyd.getAngle
+    if (location.y > 31) {
+      dead = true
+      game.globalHealth -= version.tier
+    }
+    if (health <= 0) dead = true
+    if (dead) {
+      game.invaders = game.invaders.filterNot(e => e eq this)
+      bodyd.destroyFixture(fixture)
+      game.world.destroyBody(bodyd)
+    }
   }
   def draw(batch: PolygonSpriteBatch): Unit = {
     batch.draw(
       version.image,
-      ((location.x - .5f - (Math.cos(direction).toFloat)) * screenUnit),
-      ((location.y - .5f - (Math.sin(direction).toFloat)) * screenUnit),
-      0,
-      0,
+      ((location.x - .5f) * screenUnit),
+      ((location.y - .5f) * screenUnit),
+      screenUnit / 2,
+      screenUnit / 2,
       (screenUnit),
       (screenUnit),
       1f,
@@ -113,10 +137,10 @@ case class Invader(
     if (game.invaders.indexOf(this) == game.controlled) {
       batch.draw(
         Asdfgh.frame,
-        ((location.x - .5f - (Math.cos(direction).toFloat)) * screenUnit),
-        ((location.y - .5f - (Math.sin(direction).toFloat)) * screenUnit),
-        0,
-        0,
+        ((location.x - .5f) * screenUnit),
+        ((location.y - .5f) * screenUnit),
+        screenUnit / 2,
+        screenUnit / 2,
         (screenUnit),
         (screenUnit),
         1f,
@@ -135,5 +159,5 @@ case class Invader(
 
 case class basicOne(
     var image: TextureWrapper = Asdfgh.invader1,
-    var tier: Int = 1
+    var tier: Int = 3
 ) extends invaderType
