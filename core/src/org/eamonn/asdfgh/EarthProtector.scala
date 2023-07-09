@@ -9,8 +9,8 @@ import com.badlogic.gdx.{ApplicationAdapter, Gdx, Input}
 import org.eamonn.asdfgh.scenes.Home
 import org.eamonn.asdfgh.util.{GarbageCan, TextureWrapper}
 
-class Asdfgh extends ApplicationAdapter {
-  import Asdfgh.garbage
+class EarthProtector extends ApplicationAdapter {
+  import EarthProtector.garbage
 
   private val idMatrix = new Matrix4()
   private var batch: PolygonSpriteBatch = _
@@ -22,15 +22,15 @@ class Asdfgh extends ApplicationAdapter {
 
     batch = garbage.add(new PolygonSpriteBatch())
 
-    Asdfgh.Square = TextureWrapper.load("Square.png")
-    Asdfgh.Circle = TextureWrapper.load("Circle.png")
-    Asdfgh.Logo = TextureWrapper.load("Logo.png")
-    Asdfgh.defender = TextureWrapper.load("defender.png")
-    Asdfgh.invader1 = TextureWrapper.load("baseAlien.png")
-    Asdfgh.frame = TextureWrapper.load("frame.png")
-    Asdfgh.explode = Asdfgh.loadSound("explode.mp3")
-    Asdfgh.shot = Asdfgh.loadSound("shoot.mp3")
-    Asdfgh.continue = Asdfgh.loadSound("continue.mp3")
+    EarthProtector.Square = TextureWrapper.load("Square.png")
+    EarthProtector.Circle = TextureWrapper.load("Circle.png")
+    EarthProtector.Logo = TextureWrapper.load("Logo.png")
+    EarthProtector.defender = TextureWrapper.load("defender.png")
+    EarthProtector.invader1 = TextureWrapper.load("baseAlien.png")
+    EarthProtector.frame = TextureWrapper.load("frame.png")
+    EarthProtector.explode = EarthProtector.loadSound("explode.mp3")
+    EarthProtector.shot = EarthProtector.loadSound("shoot.mp3")
+    EarthProtector.continue = EarthProtector.loadSound("continue.mp3")
 
     Text.loadFonts()
 
@@ -63,7 +63,7 @@ class Asdfgh extends ApplicationAdapter {
 
 }
 
-object Asdfgh {
+object EarthProtector {
   implicit val garbage: GarbageCan = new GarbageCan
 
   var shot: Sound = _

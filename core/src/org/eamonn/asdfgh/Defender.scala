@@ -11,7 +11,7 @@ case class Defender(game: Game) {
   var sTick = 1f
   def draw(batch: PolygonSpriteBatch): Unit = {
     batch.draw(
-      Asdfgh.defender,
+      EarthProtector.defender,
       location.x * screenUnit,
       (location.y - 1) * screenUnit,
       screenUnit,
@@ -19,7 +19,7 @@ case class Defender(game: Game) {
     )
   }
   def shoot(): Unit = {
-    Asdfgh.shot.play()
+    EarthProtector.shot.play()
     var p = Projectile(new Vector2(location.x + .5f, location.y - 1), game)
     p.create()
     game.projectiles = p :: game.projectiles
@@ -70,7 +70,7 @@ case class Projectile(location: Vector2, game: Game) {
   }
   def draw(batch: PolygonSpriteBatch): Unit = {
     batch.draw(
-      Asdfgh.Square,
+      EarthProtector.Square,
       (location.x - .1f) * screenUnit,
       (location.y - .1f) * screenUnit,
       .2f * screenUnit,

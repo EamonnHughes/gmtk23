@@ -88,7 +88,7 @@ case class Invader(
     }
     if (health <= 0) dead = true
     if (dead) {
-      Asdfgh.explode.play()
+      EarthProtector.explode.play()
       game.invaders = game.invaders.filterNot(e => e eq this)
       bodyd.destroyFixture(fixture)
       game.world.destroyBody(bodyd)
@@ -138,7 +138,7 @@ case class Invader(
     )
     if (controlled) {
       batch.draw(
-        Asdfgh.frame,
+        EarthProtector.frame,
         ((location.x - .5f) * screenUnit),
         ((location.y - .5f) * screenUnit),
         screenUnit / 2,
@@ -160,6 +160,6 @@ case class Invader(
 }
 
 case class basicOne(
-    var image: TextureWrapper = Asdfgh.invader1,
-    var tier: Int = 5
+                     var image: TextureWrapper = EarthProtector.invader1,
+                     var tier: Int = 5
 ) extends invaderType

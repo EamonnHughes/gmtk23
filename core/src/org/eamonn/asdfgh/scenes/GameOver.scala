@@ -72,7 +72,7 @@ class GameOverController(over: GameOver) extends InputAdapter {
   override def keyDown(keycode: Int): Boolean = {
     if (keycode == Keys.SPACE) {
       over.begun = true
-      Asdfgh.continue.play()
+      EarthProtector.continue.play()
     }
     if (keycode == Keys.ESCAPE) System.exit(0)
     true

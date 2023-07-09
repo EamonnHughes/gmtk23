@@ -18,7 +18,7 @@ public class AndroidLauncher extends AndroidApplication {
         AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
         config.useAccelerometer = true;
         config.useCompass = true;
-        initialize(new Asdfgh(), config);
+        initialize(new EarthProtector(), config);
     }
 
     // Android audio seemed to have perceptible latency so do this to maybe help.
