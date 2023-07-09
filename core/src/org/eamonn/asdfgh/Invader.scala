@@ -88,6 +88,7 @@ case class Invader(
     }
     if (health <= 0) dead = true
     if (dead) {
+      Asdfgh.explode.play()
       game.invaders = game.invaders.filterNot(e => e eq this)
       bodyd.destroyFixture(fixture)
       game.world.destroyBody(bodyd)

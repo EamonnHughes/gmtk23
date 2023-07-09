@@ -18,10 +18,12 @@ class HomeControl(home: Home) extends InputAdapter {
 
     true
   }
-
   override def keyDown(keycode: Int): Boolean = {
-    if(keycode == Keys.SPACE) home.state += 1
-    if(keycode == Keys.ESCAPE) System.exit(0)
+    if (keycode == Keys.SPACE) {
+      home.state += 1
+      Asdfgh.continue.play()
+    }
+    if (keycode == Keys.ESCAPE) System.exit(0)
     true
   }
 }

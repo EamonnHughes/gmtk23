@@ -19,6 +19,7 @@ case class Defender(game: Game) {
     )
   }
   def shoot(): Unit = {
+    Asdfgh.shot.play()
     var p = Projectile(new Vector2(location.x + .5f, location.y - 1), game)
     p.create()
     game.projectiles = p :: game.projectiles
@@ -59,7 +60,7 @@ case class Projectile(location: Vector2, game: Game) {
     shape.dispose()
   }
   def update(delta: Float): Unit = {
-    bodyd.setLinearVelocity(0, -delta * 100)
+    bodyd.setLinearVelocity(0, -delta * 500)
     location.set(bodyd.getPosition)
     if (destroyed) {
       game.projectiles = game.projectiles.filterNot(e => e eq this)

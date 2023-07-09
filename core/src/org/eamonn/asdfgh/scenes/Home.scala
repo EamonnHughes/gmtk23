@@ -1,6 +1,7 @@
 package org.eamonn.asdfgh
 package scenes
 
+import com.badlogic.gdx.audio.Sound
 import com.badlogic.gdx.{Gdx, InputAdapter, Preferences}
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import org.eamonn.asdfgh.Asdfgh.garbage
@@ -11,7 +12,6 @@ class Home extends Scene {
   var state = 0
   var intro1: TextureWrapper = TextureWrapper.load("Intro1.png")
   var intro2: TextureWrapper = TextureWrapper.load("Intro2.png")
-
   override def init(): InputAdapter = new HomeControl(this)
 
   override def update(delta: Float): Option[Scene] = {

@@ -28,8 +28,9 @@ class Asdfgh extends ApplicationAdapter {
     Asdfgh.defender = TextureWrapper.load("defender.png")
     Asdfgh.invader1 = TextureWrapper.load("baseAlien.png")
     Asdfgh.frame = TextureWrapper.load("frame.png")
-
-    //    Asdfgh.sound = Asdfgh.loadSound("triangle.mp3")
+    Asdfgh.explode = Asdfgh.loadSound("explode.mp3")
+    Asdfgh.shot = Asdfgh.loadSound("shoot.mp3")
+    Asdfgh.continue = Asdfgh.loadSound("continue.mp3")
 
     Text.loadFonts()
 
@@ -65,13 +66,15 @@ class Asdfgh extends ApplicationAdapter {
 object Asdfgh {
   implicit val garbage: GarbageCan = new GarbageCan
 
-  var sound: Sound = _
+  var shot: Sound = _
+  var explode: Sound = _
   var Square: TextureWrapper = _
   var Circle: TextureWrapper = _
   var Logo: TextureWrapper = _
   var defender: TextureWrapper = _
   var invader1: TextureWrapper = _
   var frame: TextureWrapper = _
+  var continue: Sound = _
 
   def mobile: Boolean = isMobile(Gdx.app.getType)
 
